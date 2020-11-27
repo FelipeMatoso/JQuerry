@@ -6,16 +6,7 @@ const tempo_padrao = 6
 
 
 
-$(document).ready(function () {
-    console.log("ready")
-    atualizaTamanhoFrase();
-    inicializaContadores();
-    InicializaTimer();
 
-
-    $("#botao-reinicia").click(reboot)
-
-});
 
 function atualizaTamanhoFrase() {
     let numPalavras = $(".frase").text().split(" ").length
@@ -51,49 +42,23 @@ function Corretor() {
 }
 
 
-
 let tempo = $("#temporizador").text()
 
-function InicializaTimer() {
+function inicializaTimer() {
     Corretor()
-    campo.one("focus", function () {
-        setInterval(() => {
+    campo.on("focus", function () {
+        var loop = setInterval(() => {
             tempo--
             $("#temporizador").text(tempo)
             $("#botao-reinicia").attr("disabled", true)
-            if (tempo <= 0) {
+            if (tempo == 0) {
                 finalizaJogo()
-
                 tempo = 1
-                return
+                clearInterval(loop)
             }
         }, 1000);
     })
 }
-
-function finalizaJogo() {
-    $(".conteudo").addClass("class-stop")
-    $("#campo").addClass("campo-stop")
-    $("#botao-reinicia").attr("disabled", false)
-    $("#botao-reinicia").focus()
-    campo.attr("disabled", true)
-
-    inserePlacar()
-}
-
-function inserePlacar() {
-    var corpoTabela = $(".placar").find("tbody")
-    var usuario = " Doug"
-    var numPalavras = $("#conta-palavras").text();
-
-    var linha = "<tr>" +
-        "<td>" + usuario + "</td>" +
-        "<td>" + numPalavras + "</td>" +
-        "</tr>";
-
-        corpoTabela.append(linha)
-}
-
 
 function reboot() {
     tempo = tempo_padrao
@@ -113,6 +78,7 @@ function reboot() {
     campo.removeClass("corretor-errado")
 
     campo.focus()
-
-
 }
+
+
+

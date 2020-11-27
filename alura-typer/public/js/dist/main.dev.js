@@ -8,7 +8,7 @@ $(document).ready(function () {
   console.log("ready");
   atualizaTamanhoFrase();
   inicializaContadores();
-  InicializaTimer();
+  inicializaTimer();
   $("#botao-reinicia").click(reboot);
 });
 
@@ -46,18 +46,18 @@ function Corretor() {
 
 var tempo = $("#temporizador").text();
 
-function InicializaTimer() {
+function inicializaTimer() {
   Corretor();
-  campo.one("focus", function () {
-    setInterval(function () {
+  campo.on("focus", function () {
+    var loop = setInterval(function () {
       tempo--;
       $("#temporizador").text(tempo);
       $("#botao-reinicia").attr("disabled", true);
 
-      if (tempo <= 0) {
+      if (tempo == 0) {
         finalizaJogo();
         tempo = 1;
-        return;
+        clearInterval(loop);
       }
     }, 1000);
   });
@@ -76,8 +76,30 @@ function inserePlacar() {
   var corpoTabela = $(".placar").find("tbody");
   var usuario = " Doug";
   var numPalavras = $("#conta-palavras").text();
-  var linha = "<tr>" + "<td>" + usuario + "</td>" + "<td>" + numPalavras + "</td>" + "</tr>";
+  var linha = criaLinha(usuario, numPalavras);
+  linha.find(".botao-delete").click(removeLinha);
   corpoTabela.append(linha);
+}
+
+function criaLinha(usuario, numPalavras) {
+  var linha = $("<tr>");
+  var colunaUsuario = $("<td>").text(usuario);
+  var colunaPalavras = $("<td>").text(numPalavras);
+  var colunaRemove = $("<td>");
+  var link = $("<a>").addClass("botao-delete").attr("href", "#");
+  var icone = $("<i>").addClass("small material-icons").text("delete");
+  link.append(icone);
+  colunaRemove.append(link);
+  linha.append(colunaUsuario);
+  linha.append(colunaPalavras);
+  linha.append(colunaRemove);
+  console.log(linha);
+  return linha;
+}
+
+function removeLinha(e) {
+  e.preventDefault();
+  $(this).parent().parent().remove();
 }
 
 function reboot() {
@@ -92,3 +114,5 @@ function reboot() {
   campo.removeClass("corretor-errado");
   campo.focus();
 }
+
+BABABOKGDAOJADG;
