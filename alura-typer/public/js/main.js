@@ -1,29 +1,118 @@
-let frase = $(".frase").text();
-let numPalavras = frase.split(" ").length;
-let tamanhoFrase = $("#tamanho-frase");
-
-tamanhoFrase.text(numPalavras);
-
 let campo = $(".campo-digitacao")
 let caracteres = $("#conta-caracteres")
 let palavras = $("#conta-palavras")
 
-campo.on("input", function () {
-    caracteres.text(campo.val().length)
-    palavras.text(campo.val().split(/\S+/).length - 1)
-})
+const tempo_padrao = 6
+
+
+
+$(document).ready(function () {
+    console.log("ready")
+    atualizaTamanhoFrase();
+    inicializaContadores();
+    InicializaTimer();
+
+
+    $("#botao-reinicia").click(reboot)
+
+});
+
+function atualizaTamanhoFrase() {
+    let numPalavras = $(".frase").text().split(" ").length
+    let tamanhoFrase = $("#tamanho-frase")
+
+    tamanhoFrase.text(numPalavras);
+}
+
+function inicializaContadores() {
+    campo.on("input", function () {
+        caracteres.text(campo.val().length)
+        palavras.text(campo.val().split(/\S+/).length - 1)
+    })
+}
+
+function Corretor() {
+    campo.on("input", function () {
+        var digitado = campo.val()
+        var frase = $("#frase").text()
+        var comparador = frase.substr(0, digitado.length)
+
+        if (comparador == "") {
+            campo.removeClass("corretor-certo")
+            campo.removeClass("corretor-errado")
+        } else if (digitado != comparador) {
+            campo.addClass("corretor-errado")
+            campo.removeClass("corretor-certo")
+        } else {
+            campo.addClass("corretor-certo")
+            campo.removeClass("corretor-errado")
+        }
+    });
+}
+
+
 
 let tempo = $("#temporizador").text()
-campo.one("focus", function () {
 
-        setInterval(function () {
+function InicializaTimer() {
+    Corretor()
+    campo.one("focus", function () {
+        setInterval(() => {
             tempo--
-            $("#temporizador").text(tempo) 
-            if (tempo <=0) {
-                campo.attr("disabled",true)
+            $("#temporizador").text(tempo)
+            $("#botao-reinicia").attr("disabled", true)
+            if (tempo <= 0) {
+                finalizaJogo()
+
                 tempo = 1
                 return
             }
-            console.log(tempo)
-        },1000)
-})
+        }, 1000);
+    })
+}
+
+function finalizaJogo() {
+    $(".conteudo").addClass("class-stop")
+    $("#campo").addClass("campo-stop")
+    $("#botao-reinicia").attr("disabled", false)
+    $("#botao-reinicia").focus()
+    campo.attr("disabled", true)
+
+    inserePlacar()
+}
+
+function inserePlacar() {
+    var corpoTabela = $(".placar").find("tbody")
+    var usuario = " Doug"
+    var numPalavras = $("#conta-palavras").text();
+
+    var linha = "<tr>" +
+        "<td>" + usuario + "</td>" +
+        "<td>" + numPalavras + "</td>" +
+        "</tr>";
+
+        corpoTabela.append(linha)
+}
+
+
+function reboot() {
+    tempo = tempo_padrao
+
+    campo.attr("disabled", false)
+    campo.val(null)
+
+    caracteres.text("0")
+
+    palavras.text("0")
+
+
+    $(".conteudo").removeClass("class-stop")
+    campo.removeClass("campo-stop")
+
+    campo.removeClass("corretor-certo")
+    campo.removeClass("corretor-errado")
+
+    campo.focus()
+
+
+}

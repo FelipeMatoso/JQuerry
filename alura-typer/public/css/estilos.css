@@ -1,10 +1,39 @@
 body{
     text-align: center;
-    font-size: 20px;
 }
 
 h1{
     font-size: 2em;
 }
 
+.frase{
+    text-align: left;
+    font-size: 25px;
+}
+
+.icones{
+    vertical-align: middle;
+}
+
+.campo-digitacao{
+    width: 60%;
+    height: 9em;
+    border-style:dashed;
+    border-width: 7px ;
+}
+.corretor-errado{
+    border-color: red
+}
+.corretor-certo{
+    border-color: green;
+}
+.campo-stop{
+    background: rgb(201, 197, 197);
+    color: mediumblue ;
+}
+
+
+.class-stop{
+    color: red;
+}
 ul{list-style: none;}
